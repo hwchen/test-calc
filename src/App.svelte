@@ -21,6 +21,8 @@
 		["1-3", 66],
 	]);
 
+	// Just using two-way binding for selects. Should be fine for selects?
+	//Will it cause problems on larger projects?
 	let selected_country;
 	let selected_product_us;
 	let selected_product_ca;
