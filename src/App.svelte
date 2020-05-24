@@ -25,8 +25,9 @@
 	let selected_product_ca;
 
 
-$: us_time = time_map.get(selected_country + "-" + selected_product_us);
-$: ca_time = time_map.get(selected_country + "-" + selected_product_ca);
+	// have to use string as key; svelte cannot see into arrays.
+	$: us_time = time_map.get(selected_country + "-" + selected_product_us);
+	$: ca_time = time_map.get(selected_country + "-" + selected_product_ca);
 
 </script>
 
