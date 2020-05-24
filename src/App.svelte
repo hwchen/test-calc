@@ -1,5 +1,32 @@
 <script>
+	import * as Pancake from '@sveltejs/pancake';
 	import Select from './Select.svelte'
+
+const us_glue_points = [
+	{ year: 2019, value: 5000 },
+	{ year: 2018, value: 6000 },
+	{ year: 2017, value: 2000 },
+	{ year: 2016, value: 8000 },
+];
+const us_tape_points = [
+	{ year: 2019, value: 2000 },
+	{ year: 2018, value: 3000 },
+	{ year: 2017, value: 1000 },
+	{ year: 2016, value: 4000 },
+];
+const ca_maple_points = [
+	{ year: 2019, value: 9000 },
+	{ year: 2018, value: 3000 },
+	{ year: 2017, value: 8000 },
+	{ year: 2016, value: 2000 },
+];
+const ca_lumber_points = [
+	{ year: 2019, value: 7000 },
+	{ year: 2018, value: 1000 },
+	{ year: 2017, value: 8000 },
+	{ year: 2016, value: 1000 },
+];
+
 	let countries = [
 		{id: "0", name: "United States"},
 		{id: "1", name: "Canada"},
@@ -42,6 +69,10 @@
 	function update_selected_product_ca(value) {
 		selected_product_ca = value;
 	}
+
+	// for chart
+	let miny = +Infinity;
+	let maxy = -Infinity;
 </script>
 
 <main>
@@ -75,6 +106,26 @@
 	{/if}
 </main>
 
+<section class="hero">
+	<div class="chart">
+		<Pancake.Chart x1={2016} x2={2019} y1={0} y2={10000}>
+			<Pancake.Grid horizontal count={10} let:value let:last>
+				<div class="grid-line horizontal"><span>{value} {last ? 'dollars' : ''}</span></div>
+			</Pancake.Grid>
+			<Pancake.Grid vertical count={4} let:value>
+				<div class="grid-line vertical"></div>
+				<span class="year-label">{value}</span>
+			</Pancake.Grid>
+
+			<Pancake.Svg>
+				<Pancake.SvgLine data={us_tape_points} x="{d => d.year}" y="{d => d.value}" let:d>
+					<path class="line" {d}/>
+				</Pancake.SvgLine>
+			</Pancake.Svg>
+		</Pancake.Chart>
+	</div>
+</section>
+
 <style>
 	main {
 		text-align: center;
@@ -90,9 +141,65 @@
 		font-weight: 100;
 	}
 
-	@media (min-width: 640px) {
+	@media (min-width: 800px) {
 		main {
 			max-width: none;
 		}
+		.chart {
+			height: 600px
+		}
+	}
+
+	.hero {
+		margin: 0 auto 4em auto;
+		max-width: 80em;
+	}
+
+		.chart {
+		height: 450px;
+		padding: 3em 0 2em 2em;
+		margin: 0 0 36px 0;
+		max-width: 50em;
+		margin: 0 auto;
+	}
+	.grid-line {
+		position: relative;
+		display: block;
+	}
+	.grid-line.horizontal {
+		width: calc(100% + 2em);
+		left: -2em;
+		border-bottom: 1px dashed #ccc;
+	}
+	.grid-line.vertical {
+		height: 100%;
+		border-left: 1px dashed #ccc;
+	}
+	.grid-line span {
+		position: absolute;
+		left: 0;
+		bottom: 2px;
+		line-height: 1;
+		font-family: sans-serif;
+		font-size: 14px;
+		color: #999;
+	}
+	.year-label {
+		position: absolute;
+		width: 4em;
+		left: -2em;
+		bottom: -30px;
+		font-family: sans-serif;
+		font-size: 14px;
+		color: #999;
+		text-align: center;
+	}
+		path.line {
+		stroke: #ff3e00;
+		opacity: 0.5;
+		stroke-linejoin: round;
+		stroke-linecap: round;
+		stroke-width: 2px;
+		fill: none;
 	}
 </style>
