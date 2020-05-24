@@ -1,4 +1,5 @@
 <script>
+	import Select from './Select.svelte'
 	let countries = [
 		{id: 0, name: "United States"},
 		{id: 1, name: "Canada"},
@@ -33,36 +34,21 @@
 
 <main>
 	<div>
-		<select bind:value={selected_country}>
-			{#each countries as country}
-			<option value={country.id}>
-				{country.name}
-			</option>
-			{/each}
-		</select>
+		<Select label="Country:" options={countries} bind:value={selected_country}>
+		</Select>
 		<p>Selected Country: {selected_country}</p>
 	</div>
 	{#if selected_country === 0 }
 	<div>
-		<select bind:value={selected_product_us}>
-			{#each us_products as product}
-			<option value={product.id}>
-				{product.name}
-			</option>
-			{/each}
-		</select>
-		<p>{selected_product_us}</p>
+		<Select label="Product:" options={us_products} bind:value={selected_product_us}>
+		</Select>
+		<p>Selected Product: {selected_product_us}</p>
 	</div>
 	{:else }
 	<div>
-		<select bind:value={selected_product_ca}>
-			{#each ca_products as product}
-			<option value={product.id}>
-				{product.name}
-			</option>
-			{/each}
-		</select>
-		<p>{selected_product_ca}</p>
+		<Select label="Product:" options={ca_products} bind:value={selected_product_ca}>
+		</Select>
+		<p>Selected Product: {selected_product_ca}</p>
 	</div>
 	{/if}
 
