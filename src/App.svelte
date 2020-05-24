@@ -9,63 +9,71 @@
 		{id: 1, name: "Tape"},
 	];
 	let ca_products = [
-		{id: 0, name: "Maple Syrup"},
-		{id: 1, name: "Lumber"},
+		{id: 2, name: "Maple Syrup"},
+		{id: 3, name: "Lumber"},
 	];
 
 	let time_map = new Map([
 		["0-0", 33],
-		["1-0", 44],
-		["0-1", 55],
-		["1-1", 66],
+		["0-1", 44],
+		["1-2", 55],
+		["1-3", 66],
 	]);
 
-	let selected = {
-		country: 0,
-		product: 0,
-	};
+	let selected_country;
+	let selected_product_us;
+	let selected_product_ca;
 
-$: time = time_map.get(selected.country + "-" + selected.product);
+
+$: us_time = time_map.get(selected_country + "-" + selected_product_us);
+$: ca_time = time_map.get(selected_country + "-" + selected_product_ca);
 
 </script>
 
 <main>
 	<div>
-		<select bind:value={selected.country}>
+		<select bind:value={selected_country}>
 			{#each countries as country}
 			<option value={country.id}>
 				{country.name}
 			</option>
 			{/each}
 		</select>
-		<p>Selected Country: {selected.country}</p>
+		<p>Selected Country: {selected_country}</p>
 	</div>
-	{#if selected.country === 0 }
+	{#if selected_country === 0 }
 	<div>
-		<select bind:value={selected.product}>
+		<select bind:value={selected_product_us}>
 			{#each us_products as product}
 			<option value={product.id}>
 				{product.name}
 			</option>
 			{/each}
 		</select>
-		<p>{selected.product}</p>
+		<p>{selected_product_us}</p>
 	</div>
 	{:else }
 	<div>
-		<select bind:value={selected.product}>
+		<select bind:value={selected_product_ca}>
 			{#each ca_products as product}
 			<option value={product.id}>
 				{product.name}
 			</option>
 			{/each}
 		</select>
-		<p>{selected.product}</p>
+		<p>{selected_product_ca}</p>
 	</div>
 	{/if}
+
+	{#if selected_country === 0 }
 	<div>
-		<p>Time: {time}</p>
+		<p>Time: {us_time}</p>
 	</div>
+	{:else }
+	<div>
+		<p>Time: {ca_time}</p>
+	</div>
+	{/if}
 </main>
 
 <style>
