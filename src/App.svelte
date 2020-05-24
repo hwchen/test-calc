@@ -1,17 +1,17 @@
 <script>
 	import Select from './Select.svelte'
 	let countries = [
-		{id: 0, name: "United States"},
-		{id: 1, name: "Canada"},
+		{id: "0", name: "United States"},
+		{id: "1", name: "Canada"},
 	];
 
 	let us_products = [
-		{id: 0, name: "Glue"},
-		{id: 1, name: "Tape"},
+		{id: "0", name: "Glue"},
+		{id: "1", name: "Tape"},
 	];
 	let ca_products = [
-		{id: 2, name: "Maple Syrup"},
-		{id: 3, name: "Lumber"},
+		{id: "2", name: "Maple Syrup"},
+		{id: "3", name: "Lumber"},
 	];
 
 	let time_map = new Map([
@@ -23,9 +23,9 @@
 
 	// NOTE big note, `select` always returns a string. So if I want to use a number, `===` won't work.
 	// Maybe should just keep it as all strings.
-	let selected_country = 0;
-	let selected_product_us = 0;
-	let selected_product_ca = 2;
+	let selected_country = "0";
+	let selected_product_us = "0";
+	let selected_product_ca = "2";
 
 
 	// have to use string as key; svelte cannot see into arrays.
@@ -50,13 +50,13 @@
 		</Select>
 		<p>Selected Country: {selected_country}</p>
 	</div>
-	{#if selected_country == 0 }
+	{#if selected_country === "0" }
 	<div>
 		<Select label="Product:" options={us_products} value={selected_product_us} on_change="{ev => update_selected_product_us(ev.target.value)}">
 		</Select>
 		<p>Selected Product: {selected_product_us}</p>
 	</div>
-	{:else if selected_country == 1}
+	{:else if selected_country === "1" }
 	<div>
 		<Select label="Product:" options={ca_products} value={selected_product_ca} on_change="{ev => update_selected_product_ca(ev.target.value)}">
 		</Select>
@@ -64,11 +64,11 @@
 	</div>
 	{/if}
 
-	{#if selected_country == 0 }
+	{#if selected_country === "0" }
 	<div>
 		<p>US product Time: {us_time}</p>
 	</div>
-	{:else if selected_country == 2}
+	{:else if selected_country === "1" }
 	<div>
 		<p>CA product Time: {ca_time}</p>
 	</div>
