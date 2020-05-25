@@ -39,7 +39,7 @@ const ca_lumber_points = [
 		{id: "3", name: "Lumber"},
 	];
 
-	// TODO figure out filter to separate us and ca products
+	// filter to separate us and ca products
 	let us_products = products.filter(p => p.id < 2);
 	let ca_products = products.filter(p => p.id >= 2);
 
@@ -56,8 +56,13 @@ const ca_lumber_points = [
 	let selected_country = "0";
 	let selected_product = "0";
 
-	// last selected product value for a country.
-	// set defaults per country here.
+	// Last selected product value for a country.
+	// this is important, because otherwise switching country will lead
+	// to some random product selection. But remember, this behavior is only
+	// important when the product behavior is dependent on the country
+	// behavior. If they were independent, not need to save this state.
+	//
+	// Also set defaults per country here.
 	let last_selected = new Map([
 		["0", "0"],
 		["1", "2"],
