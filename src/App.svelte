@@ -32,6 +32,14 @@ const ca_lumber_points = [
 		{id: "1", name: "Canada"},
 	];
 
+	let products = [
+		{id: "0", name: "Glue"},
+		{id: "1", name: "Tape"},
+		{id: "2", name: "Maple Syrup"},
+		{id: "3", name: "Lumber"},
+	];
+
+	// TODO figure out filter to separate us and ca products
 	let us_products = [
 		{id: "0", name: "Glue"},
 		{id: "1", name: "Tape"},
@@ -41,6 +49,7 @@ const ca_lumber_points = [
 		{id: "3", name: "Lumber"},
 	];
 
+	// Note that there's only certain combinations, so selectors need to filter
 	let time_map = new Map([
 		["0-0", 33],
 		["0-1", 44],
@@ -51,28 +60,41 @@ const ca_lumber_points = [
 	// NOTE big note, `select` always returns a string. So if I want to use a number, `===` won't work.
 	// Maybe should just keep it as all strings.
 	let selected_country = "0";
-	let selected_product_us = "0";
-	let selected_product_ca = "2";
+	let selected_product = "0";
+
+	// last selected product value for a country.
+	// set defaults per country here.
+	let last_selected = new Map([
+		["0", "0"],
+		["1", "2"],
+	]);
+
+	let data = us_glue_points;
 
 
 	// have to use string as key; svelte cannot see into arrays.
 	// this should automatically update when selected is manually updated
-	$: us_time = time_map.get(selected_country + "-" + selected_product_us);
-	$: ca_time = time_map.get(selected_country + "-" + selected_product_ca);
+	$: key = selected_country + "-" + selected_product;
+	$: time = time_map.get(key);
+
+	$: switch (key) {
+		case "0-0": data = us_glue_points;
+		case "0-1": data = us_tape_points;
+		case "1-2": data = ca_maple_points;
+		case "1-3": data = ca_lumber_points;
+}
 
 	function update_selected_country(value) {
+		// first save the last selected value for the current country
+		last_selected.set(selected_country, selected_product);
+		// then update the country value
 		selected_country = value;
+		// and update the last product value for the new country
+		selected_product = last_selected.get(selected_country);
 	}
-	function update_selected_product_us(value) {
-		selected_product_us = value;
+	function update_selected_product(value) {
+		selected_product = value;
 	}
-	function update_selected_product_ca(value) {
-		selected_product_ca = value;
-	}
-
-	// for chart
-	let miny = +Infinity;
-	let maxy = -Infinity;
 </script>
 
 <main>
@@ -83,25 +105,25 @@ const ca_lumber_points = [
 	</div>
 	{#if selected_country === "0" }
 	<div>
-		<Select label="Product:" options={us_products} value={selected_product_us} on_change="{ev => update_selected_product_us(ev.target.value)}">
+		<Select label="Product:" options={us_products} value={selected_product} on_change="{ev => update_selected_product(ev.target.value)}">
 		</Select>
-		<p>Selected Product: {selected_product_us}</p>
+		<p>Selected Product: {selected_product}</p>
 	</div>
 	{:else if selected_country === "1" }
 	<div>
-		<Select label="Product:" options={ca_products} value={selected_product_ca} on_change="{ev => update_selected_product_ca(ev.target.value)}">
+		<Select label="Product:" options={ca_products} value={selected_product} on_change="{ev => update_selected_product(ev.target.value)}">
 		</Select>
-		<p>Selected Product: {selected_product_ca}</p>
+		<p>Selected Product: {selected_product}</p>
 	</div>
 	{/if}
 
 	{#if selected_country === "0" }
 	<div>
-		<p>US product Time: {us_time}</p>
+		<p>US product Time: {time}</p>
 	</div>
 	{:else if selected_country === "1" }
 	<div>
-		<p>CA product Time: {ca_time}</p>
+		<p>CA product Time: {time}</p>
 	</div>
 	{/if}
 </main>
@@ -118,7 +140,7 @@ const ca_lumber_points = [
 			</Pancake.Grid>
 
 			<Pancake.Svg>
-				<Pancake.SvgLine data={us_tape_points} x="{d => d.year}" y="{d => d.value}" let:d>
+				<Pancake.SvgLine data={data} x="{d => d.year}" y="{d => d.value}" let:d>
 					<path class="line" {d}/>
 				</Pancake.SvgLine>
 			</Pancake.Svg>
