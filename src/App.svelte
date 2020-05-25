@@ -78,10 +78,20 @@ const ca_lumber_points = [
 	$: time = time_map.get(key);
 
 	$: switch (key) {
-		case "0-0": data = us_glue_points;
-		case "0-1": data = us_tape_points;
-		case "1-2": data = ca_maple_points;
-		case "1-3": data = ca_lumber_points;
+		case "0-0":
+			data = us_glue_points;
+			break;
+		case "0-1":
+			data = us_tape_points;
+			break;
+		case "1-2":
+			data = ca_maple_points;
+			break;
+		case "1-3":
+			data = ca_lumber_points;
+			break;
+		default:
+			console.log("key", key, "not supported");
 }
 
 	function update_selected_country(value) {
