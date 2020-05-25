@@ -40,14 +40,8 @@ const ca_lumber_points = [
 	];
 
 	// TODO figure out filter to separate us and ca products
-	let us_products = [
-		{id: "0", name: "Glue"},
-		{id: "1", name: "Tape"},
-	];
-	let ca_products = [
-		{id: "2", name: "Maple Syrup"},
-		{id: "3", name: "Lumber"},
-	];
+	let us_products = products.filter(p => p.id < 2);
+	let ca_products = products.filter(p => p.id >= 2);
 
 	// Note that there's only certain combinations, so selectors need to filter
 	let time_map = new Map([
